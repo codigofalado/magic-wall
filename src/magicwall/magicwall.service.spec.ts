@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MemebotService } from './memebot.service';
+import { MagicwallService } from './magicwall.service';
 
-describe('MemebotService', () => {
-  let service: MemebotService;
+describe('MagicwallService', () => {
+  let service: MagicwallService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MemebotService],
+      providers: [MagicwallService],
     }).compile();
 
-    service = module.get<MemebotService>(MemebotService);
+    service = module.get<MagicwallService>(MagicwallService);
   });
 
   it('should be defined', () => {

@@ -1,0 +1,72 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ConnectedSocket, WebSocketServer } from '@nestjs/websockets';
+import { MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import User from '../user/user';
+import TwitchJs, { Api, Chat } from 'twitch-js';
+import Commands from '../user/commands';
+
+@Injectable()
+@WebSocketGateway()
+export class MagicwallGateway implements OnModuleInit {
+  private api:Api;
+  private chat:Chat;
+  private channel;
+  constructor(private configService: ConfigService){
+    const token = this.configService.get<string>('TOKEN');
+    const username = this.configService.get<string>('USER');
+    this.channel = this.configService.get<string>('CHANNEL');
+    const { api, chat } = new TwitchJs({ token, username });
+    this.api = api;
+    this.chat = chat;
+    // Connect ...
+    this.chat.connect().then(() => {
+    // ... and then join the channel.
+    chat.join(this.channel);
+    });
+  }
+  onModuleInit(){
+    // Aqui nós nos conectamos à Twitch
+    this.chat.on(TwitchJs.Chat.Events.ALL, message => {
+      if(message.command === TwitchJs.Chat.Commands.PRIVATE_MESSAGE){
+        const user = new User(message);
+        const commands = new Commands(user.message);
+        if(commands.isCommand){
+          // Você digitou o comando certo!
+          if(commands.value == ''){
+            // Você não enviou valor algum junto com o comando
+            this.chat.say(this.channel, `@${user.username} Como trocar a cor da parede: !parede COR`);
+            this.chat.say(this.channel, `Substitua "COR" por qualquer cor válida (hexadecimal, nome da cor, rgb, etc)`);
+          }
+          if(commands.isColor){
+            // Você digitou uma cor válida!
+            this.sendColor(commands.value);
+          }
+          // console.log('Valor do Comando', commands.value);
+          // console.log('Comando é Cor?', commands.isColor);
+        }
+          // console.log('Mensagem', message.message);
+          // this.chat.say(this.channel, `@${message.username}, você é uma pessoa linda!`);
+      }
+    });
+    console.log('Magicwall Gateway Iniciado');
+  }
+  @WebSocketServer()
+  private server: Server;
+  @SubscribeMessage('fernando')
+  handleEvent(
+    @MessageBody() data: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    // Função de Teste para possibilitar Websocket do Front para o Back
+    // return console.log(data, client);
+    return ` ${data} - ${client}`;
+  }
+  sendData(data: string){
+      this.server.emit('events', [...data].reverse().join(''));
+  }
+  sendColor(color: string){
+      this.server.emit('changeColor', color);
+  }
+}

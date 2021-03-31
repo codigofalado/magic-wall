@@ -1,30 +1,13 @@
+import validateColor from "validate-color";
 export default class Commands {
     // Cada comando é um MEME diferente no vídeo
     private commands = {
-        KO: ["!ko"],
-        Boy: ["!hehe", "!boy", "!boi"],
-        Shit: ["!shit", "!merda"],
-        Nazare: ["!nazare", "!conta", "!matematica"],
-        Windows: ["!windows", "!ruindows", "!telaazul"],
-        Surprise: ["!surprise", "!modafoca", "!surpresa"],
-        Smart: ["!smart", "!think", "!esperto"],
-        Magic: ["!magic"],
-        Cafe: ["!cafe", "!café", "!coffee"],
-        Dancing: ["!dancing", "!dança", "!danca", "!dance"],
-        Uau: ["!uau", "!wow"],
-        Errou: ["!errou", "!errado"],
-        Erro: ["!erro", "!error", "!bug"],
-        Confuso: ["!confuso", "!travolta"],
-        Woohoo: ["!woohoo", "!uhu", "!wohoo"],
-        Hackerman: ["!hacker"],
-        Thug: ["!thug"],
-        Codigo: ["!codigo", "!code"],
-        Denied: ["!denied", "!negado"],
-        Loading: ["!loading", "!carregando"],
-        Memes: ["!memes", "!meme"]
+        MagicWall: ["!parede", "!wall", "!magicwall"],
     };
     private _isCommand = false;
+    private _isColor = false;
     private _command:string;
+    private _commandValue:string;
     constructor(private message: string){
         Object.keys(this.commands).forEach(e => {
             if(!this._isCommand){
@@ -32,6 +15,8 @@ export default class Commands {
                     if(message.toLowerCase().startsWith(element)){
                         this._isCommand = true;
                         this._command = e;
+                        this._commandValue = message.substr(element.length).trim();
+                        this._isColor = this.setColor();
                         return;
                     }
                 });
@@ -41,16 +26,16 @@ export default class Commands {
     get command(){
         return this._command;
     }
+    get value(){
+        return this._commandValue;
+    }
     get isCommand(){
         return this._isCommand;
     }
-    get all(){
-        let allCommands = "!memes";
-        Object.keys(this.commands).forEach(element => {
-            if(element != "Memes"){
-                allCommands += ", "+ this.commands[element][0];
-            }
-        });
-        return `Você pode usar esses memes: ${allCommands}`;
+    get isColor(){
+        return this._isColor;
+    }
+    setColor(): boolean{
+        return validateColor(this._commandValue);
     }
 }

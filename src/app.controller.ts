@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Param, Render } from '@nestjs/common';
+import { MagicwallService } from './magicwall/magicwall.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  
+  constructor(private readonly magicwallService: MagicwallService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Render('index')
+  getTest(): object {
+    return {message: this.magicwallService.getTest()};
   }
 }
