@@ -19,6 +19,10 @@
             console.log('changeColor', color);
             changeColor(color);
         });
+        socket.on('changePhoto', function (photo) {
+            console.log('changePhoto', photo);
+            changePhoto(photo);
+        });
         socket.on('exception', function (data) {
             console.log('event', data);
         });
@@ -28,6 +32,10 @@
         function changeColor(newColor) {
             const container = document.getElementById('container');
             container.style.backgroundColor = newColor;
+        }
+        function changePhoto(newPhoto) {
+            const container = document.getElementById('container');
+            container.style.backgroundImage = "url(" + newPhoto + ")";
         }
     </script>
 </head>
@@ -40,6 +48,9 @@
     #container {
         width: 100vw;
         height: 100vh;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
     }
 </style>
 

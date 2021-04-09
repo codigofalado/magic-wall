@@ -18,11 +18,19 @@ Foi desenvolvido ao vivo na [Twitch](https://www.twitch.tv/codigofalado)!.
 - [x] Certificar-se de que os comandos são case insensitive
 - [x] Enviar a cor para o Front-End (**BOOM** -> MVP vai até aqui)
 - [x] Quando User não enviar nada (nem cor e nem texto), ensina a usar o comando no chat.
-- [ ] Integrar com a API do Unsplash
-- [ ] Fazer o BOT gritar no chat os créditos da imagem atual
+- [x] Integrar com a API do Unsplash
+- [x] Fazer o BOT gritar no chat os créditos da imagem atual
 - [ ] Integrar o BOT ao recurso de Pontos do Canal na Twitch
 - [ ] Segurar a imagem trocada com pontos por N minutos
 - [ ] Criar um comando para imagem randômica
+
+## Iniciando o projeto
+
+`npm run start`
+
+## Iniciando o projeto em modo desenvolvimento
+
+`npm run start:dev`
 
 ## Test
 
