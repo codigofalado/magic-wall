@@ -43,21 +43,21 @@ export class MagicwallGateway implements OnModuleInit {
             this.chat.say(this.channel, `Substitua "VALOR" por qualquer cor válida (hexadecimal, nome da cor, rgb, etc) ou um termo para buscar imagem`);
             return;
           }
-          if(commands.isColor){
-            // Você digitou uma cor válida!
-            this.sendColor(commands.value);
+          const cooldown = this.configService.get<number>('COOLDOWN');
+          let seconds = Math.floor((user.date.valueOf() - lastCommandTimestamp) / 1000);
+          if(seconds < cooldown){
+            this.chat.say(this.channel, `@${user.username}, aguarde ${cooldown - seconds} segundos para usar ${commands.command} novamente!`);
           }else{
-            const cooldown = this.configService.get<number>('COOLDOWN');
-            let seconds = Math.floor((user.date.valueOf() - lastCommandTimestamp) / 1000);
-            if(seconds < cooldown){
-                this.chat.say(this.channel, `@${user.username}, aguarde ${cooldown - seconds} segundos para usar ${commands.command} novamente!`);
+            lastCommandTimestamp = user.date.valueOf();
+            seconds = cooldown;
+            if(commands.isColor){
+              // Você digitou uma cor válida!
+              this.sendColor(commands.value);
             }else{
-                lastCommandTimestamp = user.date.valueOf();
-                seconds = cooldown;
-                // Aqui nós enviaremos o valor para o Unsplash
-                this.searchUnsplash(commands.value);
-            }    
-          }
+              // Aqui nós enviaremos o valor para o Unsplash
+              this.searchUnsplash(commands.value);            
+            }
+          }    
         }
       }
     });
