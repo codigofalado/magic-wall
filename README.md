@@ -23,6 +23,7 @@ Foi desenvolvido ao vivo na [Twitch](https://www.twitch.tv/codigofalado)!.
 - [ ] Integrar o BOT ao recurso de Pontos do Canal na Twitch
 - [ ] Segurar a imagem trocada com pontos por N minutos
 - [ ] Criar um comando para imagem randômica
+- [ ] Sub pode burlar cooldown
 
 ## Iniciando o projeto
 
