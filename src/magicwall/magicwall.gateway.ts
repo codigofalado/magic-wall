@@ -100,6 +100,7 @@ export class MagicwallGateway implements OnModuleInit {
           this.sendPhoto(firstPhoto.urls.regular);
           // Dar os créditos no chat
           this.chat.say(this.channel, `Usando a foto ${firstPhoto.description} por ${firstPhoto.user.name}`);
+          this.chat.say(this.channel, `https://unsplash.com/@${firstPhoto.user.username}?utm_source=magicwall&utm_medium=referral`);
           // Trigger Download
           unsplash.photos.trackDownload({
             downloadLocation: firstPhoto.links.download_location,
